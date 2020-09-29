@@ -1,7 +1,8 @@
 const {
   override,
   overrideDevServer,
-  addWebpackPlugin
+  addWebpackPlugin,
+  disableChunk
 } = require("customize-cra");
 
 const ExtensionReloader = require('webpack-extension-reloader');
@@ -41,6 +42,7 @@ module.exports = {
       extensionReloader
     ) : undefined,
     addWebpackPlugin(copyPlugin),
+    disableChunk(),
     multipleEntry.addMultiEntry,
   ),
   devServer: overrideDevServer(
