@@ -1,7 +1,17 @@
 const {
   override,
-  overrideDevServer
+  overrideDevServer,
+  addWebpackPlugin
 } = require("customize-cra");
+
+const ExtensionReloader = require('webpack-extension-reloader');
+const extensionReloader = new ExtensionReloader({
+  entries: {
+    contentScript: [],
+    background: 'background',
+    extensionPage: ['popup', 'options']
+  }
+});
 
 const multipleEntry = require('react-app-rewire-multiple-entry')([
   {
@@ -10,6 +20,13 @@ const multipleEntry = require('react-app-rewire-multiple-entry')([
     outPath: '/index.html'
   }
 ]);
+
+const CopyPlugin = require('copy-webpack-plugin');
+const copyPlugin = new CopyPlugin({
+  patterns: [
+    { from: 'public', to: '' },
+  ]
+})
 
 const devServerConfig = () => config => {
   return {
@@ -20,6 +37,10 @@ const devServerConfig = () => config => {
 
 module.exports = {
   webpack: override(
+    process.env.NODE_ENV === 'development' ? addWebpackPlugin(
+      extensionReloader
+    ) : undefined,
+    addWebpackPlugin(copyPlugin),
     multipleEntry.addMultiEntry,
   ),
   devServer: overrideDevServer(
