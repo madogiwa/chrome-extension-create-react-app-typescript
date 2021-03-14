@@ -1,3 +1,4 @@
 
 // @ts-ignore
-console.log('aaa');
+console.log('content');
+

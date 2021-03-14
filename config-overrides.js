@@ -15,8 +15,9 @@ const multipleEntry = require('react-app-rewire-multiple-entry')([
 
 const ExtensionReloader = require('webpack-extension-reloader');
 const extensionReloader = new ExtensionReloader({
+  reloadPage: true,
   entries: {
-    contentScript: ['content-script'],
+    contentScript: ['content_script'],
     background: 'background',
     extensionPage: ['popup', 'options']
   }
@@ -40,7 +41,8 @@ const path = require("path");
 const addEntryPlugin = (config, env) => {
   config.entry = {
     ...config.entry,
-    content_script: [path.resolve('src/content.ts')]
+    content_script: [path.resolve('src/content.ts')],
+    background: [path.resolve('src/background.ts')]
   }
 
   // Remove hash
